@@ -75,6 +75,8 @@ export default function TipTapEditor({ ydoc, currentUser, onReady, readOnly = fa
       // StarterKit without history - Collaboration extension provides its own history
       StarterKit.configure({
         history: false,
+        link: false,
+        underline: false,
         dropcursor: {
           color: currentUser.cursorColor,
           width: 2,
