@@ -9,6 +9,7 @@
     "dev:next": "next dev -p 3001",
     "dev:socket": "tsx socket-server.ts",
     "build": "next build",
+    "build:socket": "npm install",
     "start": "NODE_ENV=production tsx server.ts",
     "start:socket": "tsx socket-server.ts",
     "lint": "eslint"
@@ -58,6 +59,7 @@
     "eslint-config-next": "16.1.4",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
