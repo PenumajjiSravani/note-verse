@@ -167,7 +167,7 @@ app.prepare().then(() => {
       const users: UserInfo[] = sockets
         .map(s => ({
           socketId: s.id,
-          user: (s as CustomSocket).data.user!
+          user: (s as any).data.user!
         }))
         .filter(u => u.user);
 
@@ -261,7 +261,7 @@ app.prepare().then(() => {
         const users: UserInfo[] = sockets
           .map(s => ({
             socketId: s.id,
-            user: (s as CustomSocket).data.user!
+            user: (s as any).data.user!
           }))
           .filter(u => u.user);
         
