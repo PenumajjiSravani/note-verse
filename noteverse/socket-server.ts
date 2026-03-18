@@ -202,7 +202,7 @@ io.on('connection', (socket: CustomSocket) => {
     const users: UserInfo[] = sockets
       .map(s => ({
         socketId: s.id,
-        user: (s as CustomSocket).data.user!
+        user: (s as any).data.user!
       }))
       .filter(u => u.user);
 
@@ -351,7 +351,7 @@ io.on('connection', (socket: CustomSocket) => {
       const users: UserInfo[] = sockets
         .map(s => ({
           socketId: s.id,
-          user: (s as CustomSocket).data.user!
+          user: (s as any).data.user!
         }))
         .filter(u => u.user);
       
