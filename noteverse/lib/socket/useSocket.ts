@@ -32,7 +32,10 @@ export function useSocket(options: UseSocketOptions = {}) {
 
     // Initialize socket connection
     const socketInstance = io(socketUrl, {
-      transports: ['websocket', 'polling'], // Try WebSocket first, fallback to polling
+      path: '/socket.io/', // Explicitly set the default path
+      transports: ['websocket'], // Stick to websocket
+      upgrade: false, // Don't try to upgrade from polling if we are forcing websocket
+      secure: true,
       autoConnect: options.autoConnect !== false,
       reconnection: options.reconnection !== false,
       reconnectionDelay: options.reconnectionDelay || 1000,
@@ -51,12 +54,14 @@ export function useSocket(options: UseSocketOptions = {}) {
     
     // Set socket in next tick/callback to avoid synchronous setState warning
     setTimeout(() => {
+      console.log('🔄 Setting socket state for useSocket hook');
       setSocket(socketInstance);
     }, 0);
 
     // Connection event handlers
     socketInstance.on('connect', () => {
-      console.log('✅ Socket connected:', socketInstance.id);
+      console.log('✅ Socket connected successfully!');
+      console.log('   Socket ID:', socketInstance.id);
       console.log('   Transport:', socketInstance.io.engine.transport.name);
       setIsConnected(true);
       setIsConnecting(false);
@@ -75,8 +80,13 @@ export function useSocket(options: UseSocketOptions = {}) {
     });
 
     socketInstance.on('connect_error', (error) => {
-      console.error('❌ Socket connection error:', error.message);
-      console.error('   Server URL:', socketUrl);
+      console.error('❌ Socket connection error summary:', error.message);
+      console.error('❌ Full Error Object:', error);
+      console.error('   Error Type/Name:', error.name);
+      if ((error as any).description) console.error('   Description:', (error as any).description);
+      if ((error as any).context) console.error('   Context:', (error as any).context);
+      
+      console.error('   Attempted Server URL:', socketUrl);
       setIsConnecting(false);
       setIsConnected(false);
     });
