@@ -26,7 +26,7 @@ export function useSocket(options: UseSocketOptions = {}) {
   useEffect(() => {
     // Get Socket.io server URL from environment variable
     // CRITICAL: Use environment variable, NOT localhost or window.location
-    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3000';
+    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL;
     
     console.log('🔌 Connecting to Socket.io server:', socketUrl);
 
@@ -48,7 +48,11 @@ export function useSocket(options: UseSocketOptions = {}) {
     });
 
     socketRef.current = socketInstance;
-    setSocket(socketInstance);
+    
+    // Set socket in next tick/callback to avoid synchronous setState warning
+    setTimeout(() => {
+      setSocket(socketInstance);
+    }, 0);
 
     // Connection event handlers
     socketInstance.on('connect', () => {
@@ -101,7 +105,7 @@ export function useSocket(options: UseSocketOptions = {}) {
         socketRef.current = null;
       }
     };
-  }, []); // Empty dependency array - connect once on mount
+  }, [options.autoConnect, options.reconnection, options.reconnectionDelay, options.reconnectionAttempts]); // Added missing dependencies
 
   return { socket, isConnected, isConnecting };
 }
